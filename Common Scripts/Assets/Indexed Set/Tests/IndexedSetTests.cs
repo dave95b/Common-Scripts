@@ -23,6 +23,18 @@ namespace Tests
         }
 
         [Test]
+        public void Count()
+        {
+            Assert.AreEqual(3, set.Count);
+            set.Add(0);
+            Assert.AreEqual(4, set.Count);
+
+            set.Clear();
+            Assert.AreEqual(0, set.Count);
+        }
+
+
+        [Test]
         public void AddDistinct()
         {
             set.Clear();
@@ -49,12 +61,12 @@ namespace Tests
             AssertItemsOrder();
         }
 
-        [Test]
-        public void IndexerGetter()
+        [Test, Sequential]
+        public void IndexerGetter(
+            [Values(10, 20, 30)] int value,
+            [Values(0, 1, 2)]  int index)
         {
-            Assert.AreEqual(10, set[0]);
-            Assert.AreEqual(20, set[1]);
-            Assert.AreEqual(30, set[2]);
+            Assert.AreEqual(value, set[index]);
         }
 
         [Test]
@@ -62,6 +74,7 @@ namespace Tests
         {
             set[0] = 40;
             Assert.AreEqual(40, set[0]);
+            Assert.IsFalse(set.Contains(10));
             AssertItemsOrder();
 
             set[0] = 30;
@@ -73,6 +86,13 @@ namespace Tests
             Assert.AreEqual(30, set[0]);
             Assert.AreEqual(40, set[2]);
             AssertItemsOrder();
+        }
+
+        [Test, Sequential]
+        public void IndexerExceptions([Values(-1, 3)] int index)
+        {
+            Assert.That(() => set[index] = 0,
+            Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -122,7 +142,7 @@ namespace Tests
             set.Add(10);
             set[0] = 10;
             Assert.IsTrue(set.Contains(10));
-            Assert.IsTrue(set.Contains(20));
+            Assert.IsTrue(set.Contains(30));
             Assert.IsTrue(set.Contains(40));
             AssertItemsOrder();
         }
@@ -138,14 +158,14 @@ namespace Tests
             Assert.That(() => set.CopyTo(array, -1),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
-            Assert.That(() => set.CopyTo(array, 3),
-            Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
-
 
             Assert.That(() => set.CopyTo(array, 1),
             Throws.Exception.TypeOf<ArgumentException>());
 
             Assert.That(() => set.CopyTo(array, 2),
+            Throws.Exception.TypeOf<ArgumentException>());
+
+            Assert.That(() => set.CopyTo(array, set.Count),
             Throws.Exception.TypeOf<ArgumentException>());
 
             array = new int[2];
@@ -163,9 +183,7 @@ namespace Tests
             int[] array = new int[3];
             set.CopyTo(array, 0);
 
-            for (int i = 0; i < set.Count; i++)
-                Assert.AreEqual(set[i], array[i]);
-
+            CollectionAssert.AreEqual(set, array);
 
             array = new int[10];
             set.CopyTo(array, 0);
@@ -178,34 +196,29 @@ namespace Tests
                 Assert.AreEqual(set[i], array[i]);
         }
 
-        [Test]
-        public void IndexOf()
+        [Test, Sequential]
+        public void IndexOf(
+            [Values(10, 20, 30, 40)] int value,
+            [Values(0, 1, 2, -1)] int expectedIndex)
         {
-            int index = set.IndexOf(10);
-            Assert.AreEqual(0, index);
-            index = set.IndexOf(20);
-            Assert.AreEqual(1, index);
-            index = set.IndexOf(30);
-            Assert.AreEqual(2, index);
-
-            index = set.IndexOf(40);
-            Assert.AreEqual(-1, index);
+            int index = set.IndexOf(value);
+            Assert.AreEqual(expectedIndex, index);
         }
 
         [Test]
         public void Insert()
         {
-            bool inserted = set.Insert(100, 0);
+            bool inserted = set.Insert(0, 100);
             Assert.IsTrue(inserted);
             Assert.AreEqual(4, set.Count);
             AssertItemsOrder();
 
-            inserted = set.Insert(101, 3);
+            inserted = set.Insert(3, 101);
             Assert.IsTrue(inserted);
             Assert.AreEqual(5, set.Count);
             AssertItemsOrder();
 
-            inserted = set.Insert(101, 0);
+            inserted = set.Insert(0, 101);
             Assert.IsFalse(inserted);
             Assert.AreEqual(5, set.Count);
             AssertItemsOrder();
@@ -214,7 +227,7 @@ namespace Tests
             Assert.That(() => set.Insert(100, -1),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
-            Assert.That(() => set.Insert(100, 5),
+            Assert.That(() => set.Insert(100, set.Count),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
             AssertItemsOrder();
@@ -255,7 +268,7 @@ namespace Tests
             Assert.That(() => set.RemoveAt(-1),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
-            Assert.That(() => set.RemoveAt(2),
+            Assert.That(() => set.RemoveAt(set.Count),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
             AssertItemsOrder();
@@ -292,54 +305,47 @@ namespace Tests
             AssertItemsOrder();
 
 
-            Assert.That(() => set.Sort(-1, 3, comparer),
+            Assert.That(() => set.Sort(-1, set.Count, comparer),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
             Assert.That(() => set.Sort(0, -1, comparer),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
 
-            Assert.That(() => set.Sort(0, 4, comparer),
+            Assert.That(() => set.Sort(0, set.Count + 1, comparer),
             Throws.Exception.TypeOf<ArgumentException>());
 
             Assert.That(() => set.Sort(set.Count, 1, comparer),
             Throws.Exception.TypeOf<ArgumentException>());
         }
 
-        [Test]
-        public void BinarySearch()
+        [Test, Sequential]
+        public void BinarySearch(
+            [Values(10, 20, 30, 40, 0)] int value,
+            [Values(0, 1, 2, ~3, ~0)] int expectedIndex)
         {
-            int index = set.BinarySearch(10);
-            Assert.AreEqual(0, index);
+            int index = set.BinarySearch(value);
+            Assert.AreEqual(expectedIndex, index);
+        }
 
-            index = set.BinarySearch(20);
-            Assert.AreEqual(1, index);
-
-            index = set.BinarySearch(30);
-            Assert.AreEqual(2, index);
-
-            index = set.BinarySearch(40);
-            Assert.AreEqual(~set.Count, index);
-
-            index = set.BinarySearch(0);
-            Assert.AreEqual(~0, index);
-
+        [Test]
+        public void BinarySearchExceptions()
+        {
             IComparer<int> comparer = Comparer<int>.Default;
 
-            Assert.That(() => set.BinarySearch(-1, 3, 0, comparer),
+            Assert.That(() => set.BinarySearch(-1, set.Count, 0, comparer),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
             Assert.That(() => set.BinarySearch(0, -1, 0, comparer),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
 
-            Assert.That(() => set.BinarySearch(0, 4, 0, comparer),
+            Assert.That(() => set.BinarySearch(0, set.Count + 1, 0, comparer),
             Throws.Exception.TypeOf<ArgumentException>());
 
             Assert.That(() => set.BinarySearch(set.Count, 1, 0, comparer),
             Throws.Exception.TypeOf<ArgumentException>());
         }
-
 
         private void AssertItemsOrder()
         {

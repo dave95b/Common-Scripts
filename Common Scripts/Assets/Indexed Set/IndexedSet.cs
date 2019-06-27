@@ -23,87 +23,128 @@ public class IndexedSet<T> : IList<T>
         get => list[index];
         set
         {
-            //T oldValue = list[index];
-            //indices.Remove(oldValue);
+            T current = list[index];
+            if (current.Equals(value))
+                return;
 
-            //list[index] = value;
-            //indices[value] = index;
+            int valueIndex = IndexOf(value);
+            if (valueIndex == -1)
+                indices.Remove(current);
+            else
+            {
+                // Swap
+                list[valueIndex] = current;
+                indices[current] = valueIndex;
+            }
+
+            list[index] = value;
+            indices[value] = index;
         }
     }
 
-    public int Count { get; }
-    public bool IsReadOnly { get; }
+    public int Count => list.Count;
+    public bool IsReadOnly => false;
 
 
     public bool Add(T item)
     {
-        throw new NotImplementedException();
+        if (Contains(item))
+            return false;
+
+        indices[item] = Count;
+        list.Add(item);
+
+        return true;
     }
 
     void ICollection<T>.Add(T item)
     {
-        throw new NotImplementedException();
+        Add(item);
     }
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        list.Clear();
+        indices.Clear();
     }
 
     public bool Contains(T item)
     {
-        throw new NotImplementedException();
+        return indices.ContainsKey(item);
     }
 
     public void CopyTo(T[] array, int arrayIndex)
     {
-        throw new NotImplementedException();
+        list.CopyTo(array, arrayIndex);
     }
 
     public int IndexOf(T item)
     {
-        throw new NotImplementedException();
+        if (indices.TryGetValue(item, out int index))
+            return index;
+
+        return -1;
     }
 
     public bool Insert(int index, T item)
     {
-        throw new NotImplementedException();
+        if (Contains(item))
+            return false;
+
+        list.Insert(index, item);
+        UpdateIndicesFrom(index);
+
+        return true;
     }
+
     void IList<T>.Insert(int index, T item)
     {
-        throw new NotImplementedException();
+        Insert(index, item);
     }
 
     public bool Remove(T item)
     {
-        throw new NotImplementedException();
+        int index = IndexOf(item);
+
+        if (index == -1)
+            return false;
+
+        RemoveAt(index);
+        return true;
     }
 
     public void RemoveAt(int index)
     {
-        throw new NotImplementedException();
+        T removed = list[index];
+        indices.Remove(removed);
+
+        list.RemoveAt(index);
+        UpdateIndicesFrom(index);
     }
 
-    //TODO: all Sort methods should invoke the last one
     public void Sort()
     {
-        //list.Sort();
+        Sort(0, Count, null);
     }
 
     public void Sort(Comparison<T> comparison)
     {
-        //IComparer<T> comparer = new FunctorComparer(comparison);
-        //list.Sort(comparison);
+        if (comparison is null)
+            throw new ArgumentNullException("comparison");
+
+        IComparer<T> comparer = new FunctorComparer(comparison);
+        Sort(0, Count, comparer);
     }
 
     public void Sort(IComparer<T> comparer)
     {
-        //list.Sort(comparer);
+        Sort(0, Count, comparer);
     }
 
     public void Sort(int index, int count, IComparer<T> comparer)
     {
-        //list.Sort(index, count, comparer);
+        list.Sort(index, count, comparer);
+        UpdateIndicesFrom(0);
     }
 
     public int BinarySearch(T item)
@@ -136,6 +177,15 @@ public class IndexedSet<T> : IList<T>
         return list.GetEnumerator();
     }
 
+
+    private void UpdateIndicesFrom(int index)
+    {
+        for (int i = index; i < Count; i++)
+        {
+            T elem = list[i];
+            indices[elem] = i;
+        }
+    }
 
     private class FunctorComparer : IComparer<T>
     {
