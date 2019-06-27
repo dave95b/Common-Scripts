@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using CollectionFragmentsUtility;
 
 [Serializable]
 public readonly struct ArrayFragment<T> : IEquatable<ArrayFragment<T>>
@@ -21,14 +22,7 @@ public readonly struct ArrayFragment<T> : IEquatable<ArrayFragment<T>>
 
     public ArrayFragment(T[] array, int start, int length)
     {
-        if (array is null)
-            throw new ArgumentException("Array can not be null");
-        if (start < 0 || start > array.Length)
-            throw new ArgumentException($"'start' ({start})  parameter is out of array's bounds ({array.Length})");
-        if (start + length > array.Length)
-            throw new ArgumentException($"'start' + 'length' ({start + length}) exceeds array's bounds ({array.Length})");
-        if (length <= 0)
-            throw new ArgumentException($"'length' ({length}) can not be zero or negative");
+        ThrowHelper.ThrowIfWrongArguments(array, start, length);
 
         this.array = array;
         this.start = start;

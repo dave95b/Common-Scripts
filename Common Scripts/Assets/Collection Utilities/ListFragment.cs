@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using CollectionFragmentsUtility;
 
 [Serializable]
 public readonly struct ListFragment<T> : IEquatable<ListFragment<T>>
@@ -22,14 +23,7 @@ public readonly struct ListFragment<T> : IEquatable<ListFragment<T>>
 
     public ListFragment(List<T> list, int start, int count)
     {
-        if (list is null)
-            throw new ArgumentException("List can not be null");
-        if (start < 0 || start > list.Count)
-            throw new ArgumentException($"'start' ({start}) parameter is out of list's bounds ({list.Count})");
-        if (start + count > list.Count)
-            throw new ArgumentException($"'start' + 'count' ({start + count}) exceeds list's bounds ({list.Count})");
-        if (count <= 0)
-            throw new ArgumentException($"'count' ({count}) can not be zero or negative");
+        ThrowHelper.ThrowIfWrongArguments(list, start, count);
 
         this.list = list;
         this.start = start;
