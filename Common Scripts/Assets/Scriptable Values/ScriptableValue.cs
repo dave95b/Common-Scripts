@@ -10,9 +10,11 @@ public class ScriptableValue<T> : ScriptableObject {
     public event Action<T> OnValueChanged;
 
 #if UNITY_EDITOR
-    public T Value {
-        get { return keepPlaymodeChanges ? value : savedValue; }
-        set {
+    public T Value
+    {
+        get => keepPlaymodeChanges ? value : savedValue;
+        set
+        {
             T oldValue;
             if (keepPlaymodeChanges)
             {
@@ -43,9 +45,11 @@ public class ScriptableValue<T> : ScriptableObject {
     }
 
 #else
-    public T Value {
-        get { return value; }
-        set {
+    public T Value 
+    {
+        get => value;
+        set 
+    {
             T oldValue = this.value;
             this.value = value;
 
