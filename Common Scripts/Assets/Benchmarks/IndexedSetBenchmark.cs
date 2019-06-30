@@ -39,6 +39,8 @@ public class IndexedSetBenchmark : MonoBehaviour
             ContainsBenchmark();
         else if (Input.GetKeyDown(KeyCode.T))
             RemoveAtBenchmark();
+        else if (Input.GetKeyDown(KeyCode.Y))
+            RemoveAtFirstBenchmark();
         else if (Input.GetKeyDown(KeyCode.A))
             IndexOfBenchmark();
         else if (Input.GetKeyDown(KeyCode.S))
@@ -140,8 +142,8 @@ public class IndexedSetBenchmark : MonoBehaviour
 
     private void RemoveAtBenchmark()
     {
-        Benchmark(ListRemoveAt, "List Remove At", listText);
-        Benchmark(IndexedSetRemoveAt, "Indexed Set Remove At", indexedSetText);
+        Benchmark(ListRemoveAt, "List Remove At (last)", listText);
+        Benchmark(IndexedSetRemoveAt, "Indexed Set Remove At (last)", indexedSetText);
     }
 
     private void ListRemoveAt()
@@ -154,6 +156,25 @@ public class IndexedSetBenchmark : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
             indexedSet.RemoveAt(indexedSet.Count - 1);
+    }
+
+
+    private void RemoveAtFirstBenchmark()
+    {
+        Benchmark(ListRemoveAtFirst, "List Remove At (first)", listText);
+        Benchmark(IndexedSetRemoveAtFirst, "Indexed Set Remove At (first)", indexedSetText);
+    }
+
+    private void ListRemoveAtFirst()
+    {
+        for (int i = 0; i < count; i++)
+            list.RemoveAt(0);
+    }
+
+    private void IndexedSetRemoveAtFirst()
+    {
+        for (int i = 0; i < count; i++)
+            indexedSet.RemoveAt(0);
     }
 
 
@@ -283,8 +304,14 @@ public class IndexedSetBenchmark : MonoBehaviour
 class IntComparer : IEqualityComparer<int>
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Equals(int x, int y) => x == y;
+    public bool Equals(int x, int y)
+    {
+        return x == y;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int GetHashCode(int obj) => obj;
+    public int GetHashCode(int obj)
+    {
+        return obj;
+    }
 }

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-public class IndexedSet<T> : IList<T> where T : IEquatable<T>
+public class IndexedSet<T> : IList<T>
 {
     private List<T> list;
     private Dictionary<T, int> indices;
+
+    private IEqualityComparer<T> comparer;
 
     public IndexedSet() : this(8, EqualityComparer<T>.Default) { }
 
@@ -16,6 +18,7 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
     {
         list = new List<T>(capacity);
         indices = new Dictionary<T, int>(capacity, comparer);
+        this.comparer = comparer;
     }
 
 
@@ -26,7 +29,7 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
         set
         {
             T current = list[index];
-            if (current.Equals(value))
+            if (comparer.Equals(current, value))
                 return;
 
             int valueIndex = IndexOf(value);
@@ -44,10 +47,11 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
         }
     }
 
+    private int count = 0;
     public int Count
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => list.Count;
+        get => count;
     }
 
     public bool IsReadOnly => false;
@@ -58,8 +62,9 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
         if (Contains(item))
             return false;
 
-        indices[item] = Count;
+        indices[item] = count;
         list.Add(item);
+        count++;
 
         return true;
     }
@@ -73,6 +78,7 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
     {
         list.Clear();
         indices.Clear();
+        count = 0;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,6 +109,7 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
             return false;
 
         list.Insert(index, item);
+        count++;
         UpdateIndicesFrom(index);
 
         return true;
@@ -132,13 +139,14 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
         indices.Remove(removed);
 
         list.RemoveAt(index);
+        count--;
         UpdateIndicesFrom(index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Sort()
     {
-        Sort(0, Count, null);
+        Sort(0, count, null);
     }
 
     public void Sort(Comparison<T> comparison)
@@ -147,13 +155,13 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
             throw new ArgumentNullException("comparison");
 
         IComparer<T> comparer = new FunctorComparer(comparison);
-        Sort(0, Count, comparer);
+        Sort(0, count, comparer);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Sort(IComparer<T> comparer)
     {
-        Sort(0, Count, comparer);
+        Sort(0, count, comparer);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -200,7 +208,6 @@ public class IndexedSet<T> : IList<T> where T : IEquatable<T>
 
     private void UpdateIndicesFrom(int index)
     {
-        int count = Count;
         for (int i = index; i < count; i++)
         {
             T elem = list[i];
