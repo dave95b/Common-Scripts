@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-public class IndexedSet<T> : IList<T>
+public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
 {
     private List<T> list;
     private Dictionary<T, int> indices;
