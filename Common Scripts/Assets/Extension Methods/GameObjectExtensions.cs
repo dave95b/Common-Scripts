@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Reflection;
+using System.Collections.Generic;
 
 public static class GameObjectExtensions
 {
@@ -11,6 +11,22 @@ public static class GameObjectExtensions
             component = gameObject.AddComponent<T>();
 
         return component;
+    }
+
+    public static void FindInChildren<T>(this Component component, ref T element)
+    {
+        element = component.GetComponentInChildren<T>();
+    }
+
+    public static void FindInChildren<T>(this Component component, ref T[] elements)
+    {
+        elements = component.GetComponentsInChildren<T>();
+    }
+
+    public static void FindInChildren<T>(this Component component, ref List<T> elements)
+    {
+        T[] found = component.GetComponentsInChildren<T>();
+        elements = new List<T>(found);
     }
 
     #region Transform Extensions
