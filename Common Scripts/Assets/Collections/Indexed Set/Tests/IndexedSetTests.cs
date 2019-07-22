@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    //TODO: refactor
     [TestFixture]
     public class IndexedSetTests
     {

@@ -1,14 +1,11 @@
 {
-    "name": "Tests",
+    "name": "IndexedSet",
     "references": [
-        "GUID:08c8348922d97af4ea6a5925f8bf32bd"
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
+        "GUID:8a4b8de3cfd0998449e97bcc36472d6d"
     ],
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

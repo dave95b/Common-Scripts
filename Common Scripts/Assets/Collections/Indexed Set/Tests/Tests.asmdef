@@ -1,11 +1,14 @@
 {
-    "name": "Main",
+    "name": "Tests",
     "references": [
-        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
-        "GUID:f88fb04354076c646a4107a491394033"
+        "GUID:96a2a65bc66bc144b890d015ecdacaf8"
     ],
-    "optionalUnityReferences": [],
-    "includePlatforms": [],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

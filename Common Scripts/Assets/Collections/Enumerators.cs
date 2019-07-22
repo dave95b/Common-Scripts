@@ -4,6 +4,22 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 
+static class EnumeratorsUtility
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool MoveNext(ref int index, int count)
+    {
+        int i = index + 1;
+        if (i < count)
+        {
+            index = i;
+            return true;
+        }
+
+        return false;
+    }
+}
+
 public struct ArrayEnumerator<T> : IEnumerator<T>
 {
     private readonly T[] array;
@@ -29,14 +45,7 @@ public struct ArrayEnumerator<T> : IEnumerator<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool MoveNext()
     {
-        int i = index + 1;
-        if (i < end)
-        {
-            index = i;
-            return true;
-        }
-
-        return false;
+        return EnumeratorsUtility.MoveNext(ref index, end);
     }
 
     public void Dispose()
@@ -74,14 +83,7 @@ public struct ListEnumerator<T> : IEnumerator<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool MoveNext()
     {
-        int i = index + 1;
-        if (i < end)
-        {
-            index = i;
-            return true;
-        }
-
-        return false;
+        return EnumeratorsUtility.MoveNext(ref index, end);
     }
 
     public void Dispose()
@@ -93,3 +95,4 @@ public struct ListEnumerator<T> : IEnumerator<T>
         index = start - 1;
     }
 }
+
