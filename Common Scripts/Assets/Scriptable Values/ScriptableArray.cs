@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScriptableArray<T> : ScriptableObject, IEnumerable<T>
+public class ScriptableArray<T> : ScriptableObject, IReadOnlyList<T>, IEnumerable<T>
 {
     public T[] Array;
     public ref T this[int i] => ref Array[i];
+    T IReadOnlyList<T>.this[int i] => Array[i];
+
     public int Length => Array.Length;
+    int IReadOnlyCollection<T>.Count => Array.Length;
+
 
     private void OnEnable()
     {

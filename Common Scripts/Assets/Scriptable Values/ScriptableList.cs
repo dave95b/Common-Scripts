@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScriptableList<T> : ScriptableObject, IList<T>, IEnumerable<T>
+public class ScriptableList<T> : ScriptableObject, IList<T>, IReadOnlyList<T>, IEnumerable<T>
 {
     public List<T> List;
 
@@ -64,19 +64,19 @@ public class ScriptableList<T> : ScriptableObject, IList<T>, IEnumerable<T>
         List.RemoveAt(index);
     }
 
-    public ListEnumerator<T> GetEnumerator()
+    public List<T>.Enumerator GetEnumerator()
     {
-        return new ListEnumerator<T>(List);
+        return List.GetEnumerator();
     }
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
-        return new ListEnumerator<T>(List);
+        return List.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return new ListEnumerator<T>(List);
+        return List.GetEnumerator();
     }
 
     private void OnEnable()

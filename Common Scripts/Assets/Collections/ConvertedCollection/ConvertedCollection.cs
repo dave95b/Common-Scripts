@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Runtime.CompilerServices;
 
 public readonly struct ConvertedCollection<TInput, TOutput> : IReadOnlyList<TOutput>
 {
@@ -13,7 +14,12 @@ public readonly struct ConvertedCollection<TInput, TOutput> : IReadOnlyList<TOut
         this.converter = converter;
     }
 
-    public TOutput this[int i] => converter(collection[i]);
+    public TOutput this[int i]
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => converter(collection[i]);
+    }
+
     public int Count => collection.Count;
 
 
@@ -49,6 +55,7 @@ public readonly struct ConvertedCollection<TInput, TOutput> : IReadOnlyList<TOut
         object IEnumerator.Current => converter(collection[index]);
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool MoveNext()
         {
             return EnumeratorsUtility.MoveNext(ref index, collection.Count);
