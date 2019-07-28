@@ -274,9 +274,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 379584472}
-  - component: {fileID: 379584473}
   m_Layer: 0
-  m_Name: Indexed Set Benchmark
+  m_Name: Tests
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -296,23 +295,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &379584473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 379584470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db728dcf302421b418a3470ef6d33bcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  count: 50000
-  text: {fileID: 1673313473}
-  text2: {fileID: 214802638}
-  text3: {fileID: 1336470489}
-  text4: {fileID: 2144537039}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
