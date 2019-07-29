@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public static class CollectionExtensions
 {
@@ -8,12 +9,24 @@ public static class CollectionExtensions
 
     public static void Shuffle<T>(this IList<T> list)
     {
-        int count = list.Count;
-        var last = count - 1;
+        Shuffle(list, 0, list.Count);
+    }
 
-        for (int i = 0; i < last; ++i)
+    public static void Shuffle<T>(this IList<T> list, int count)
+    {
+        Shuffle(list, 0, count);
+    }
+
+    public static void Shuffle<T>(this IList<T> list, int start, int count)
+    {
+        Assert.IsTrue(start >= 0);
+        Assert.IsTrue(start + count <= list.Count);
+
+        int last = start + count - 1;
+
+        for (int i = start; i < last; ++i)
         {
-            int randomIndex = Random.Range(i, count);
+            int randomIndex = Random.Range(i, last + 1);
             T tmp = list[i];
             list[i] = list[randomIndex];
             list[randomIndex] = tmp;
@@ -42,23 +55,30 @@ public static class CollectionExtensions
         list.RemoveAt(lastIndex);
     }
 
-    public static ListFragment<T> Slice<T>(this List<T> list, int start, int count)
-    {
-        return new ListFragment<T>(list, start, count);
-    }
-
     #endregion IList
 
-    #region Arrays
+    #region Array
 
     public static void Shuffle<T>(this T[] array)
     {
-        int count = array.Length;
-        var last = count - 1;
+        Shuffle(array, 0, array.Length);
+    }
 
-        for (int i = 0; i < last; ++i)
+    public static void Shuffle<T>(this T[] array, int length)
+    {
+        Shuffle(array, 0, length);
+    }
+
+    public static void Shuffle<T>(this T[] array, int start, int length)
+    {
+        Assert.IsTrue(start >= 0);
+        Assert.IsTrue(start + length <= array.Length);
+
+        int last = start + length - 1;
+
+        for (int i = start; i < last; ++i)
         {
-            int randomIndex = Random.Range(i, count);
+            int randomIndex = Random.Range(i, last + 1);
             T tmp = array[i];
             array[i] = array[randomIndex];
             array[randomIndex] = tmp;
@@ -70,7 +90,6 @@ public static class CollectionExtensions
         return array[Random.Range(0, array.Length)];
     }
 
-
     public static void Swap<T>(this T[] array, int sourceIndex, int destinationIndex)
     {
         if (sourceIndex == destinationIndex)
@@ -81,10 +100,5 @@ public static class CollectionExtensions
         array[destinationIndex] = temp;
     }
 
-    public static ArrayFragment<T> Slice<T>(this T[] array, int startIndex, int length)
-    {
-        return new ArrayFragment<T>(array, startIndex, length);
-    }
-
-    #endregion Arrays
+    #endregion Array
 }
