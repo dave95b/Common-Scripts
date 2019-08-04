@@ -138,37 +138,14 @@ public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
         T removed = list[index];
         indices.Remove(removed);
 
-        list.RemoveAt(index);
+        int lastIndex = list.Count - 1;
+        T last = list[lastIndex];
+        list[index] = last;
+        list.RemoveAt(lastIndex);
+
+        indices[last] = index;
+
         count--;
-        UpdateIndicesFrom(index);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Sort()
-    {
-        Sort(0, count, null);
-    }
-
-    public void Sort(Comparison<T> comparison)
-    {
-        if (comparison is null)
-            throw new ArgumentNullException("comparison");
-
-        IComparer<T> comparer = new FunctorComparer(comparison);
-        Sort(0, count, comparer);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Sort(IComparer<T> comparer)
-    {
-        Sort(0, count, comparer);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Sort(int index, int count, IComparer<T> comparer)
-    {
-        list.Sort(index, count, comparer);
-        UpdateIndicesFrom(0);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

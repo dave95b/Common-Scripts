@@ -126,23 +126,23 @@ namespace Tests
 
             set.Remove(10);
             Assert.IsFalse(set.Contains(10));
-            Assert.IsTrue(set.Contains(20));
             Assert.IsTrue(set.Contains(30));
+            Assert.IsTrue(set.Contains(20));
             Assert.IsFalse(set.Contains(40));
             AssertItemsOrder();
 
             set[0] = 40;
             Assert.IsFalse(set.Contains(10));
-            Assert.IsFalse(set.Contains(20));
-            Assert.IsTrue(set.Contains(30));
+            Assert.IsFalse(set.Contains(30));
             Assert.IsTrue(set.Contains(40));
+            Assert.IsTrue(set.Contains(20));
             AssertItemsOrder();
 
             set.Add(10);
             set[0] = 10;
-            Assert.IsTrue(set.Contains(10));
-            Assert.IsTrue(set.Contains(30));
             Assert.IsTrue(set.Contains(40));
+            Assert.IsTrue(set.Contains(20));
+            Assert.IsTrue(set.Contains(10));
             AssertItemsOrder();
         }
 
@@ -271,51 +271,6 @@ namespace Tests
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
             AssertItemsOrder();
-        }
-
-        [Test]
-        public void Sort()
-        {
-            set.Sort();
-            AssertItemsOrder();
-
-            Comparison<int> comparison = null; 
-            Assert.That(() => set.Sort(comparison),
-            Throws.Exception.TypeOf<ArgumentNullException>());
-
-            IComparer<int> comparer = null;
-            set.Sort(comparer);
-            AssertItemsOrder();
-
-            comparer = Comparer<int>.Default;
-            set.Sort(comparer);
-            AssertItemsOrder();
-
-            set.Sort(0, set.Count, comparer);
-            AssertItemsOrder();
-
-            set.Sort(1, 2, comparer);
-            AssertItemsOrder();
-
-            set.Sort(0, 0, comparer);
-            AssertItemsOrder();
-
-            set.Sort(set.Count, 0, comparer);
-            AssertItemsOrder();
-
-
-            Assert.That(() => set.Sort(-1, set.Count, comparer),
-            Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
-
-            Assert.That(() => set.Sort(0, -1, comparer),
-            Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
-
-
-            Assert.That(() => set.Sort(0, set.Count + 1, comparer),
-            Throws.Exception.TypeOf<ArgumentException>());
-
-            Assert.That(() => set.Sort(set.Count, 1, comparer),
-            Throws.Exception.TypeOf<ArgumentException>());
         }
 
         [Test, Sequential]
