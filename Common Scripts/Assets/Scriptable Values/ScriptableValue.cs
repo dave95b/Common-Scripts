@@ -1,34 +1,102 @@
-﻿using System;
+﻿using Observables;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ScriptableValue<T> : ScriptableObject {
-
+public partial class ScriptableValue<T> : ScriptableObject, IObservable<T> where T : struct, IEquatable<T>
+{
     [SerializeField]
     protected T value;
 
-    public event Action<T> OnValueChanged;
+    private Observable<T> observable;
 
-#if UNITY_EDITOR
+
+    public void Listen(Action<T> watcher)
+    {
+        observable.Listen(watcher);
+    }
+
+    public void Listen(Action<T> watcher, Func<T, bool> where)
+    {
+        observable.Listen(watcher, where);
+    }
+
+    public void Watch(Action<T> watcher)
+    {
+        observable.Watch(watcher);
+    }
+
+    public void Watch(Action<T> watcher, Func<T, bool> where)
+    {
+        observable.Watch(watcher, where);
+    }
+
+    public void Unwatch(Action<T> watcher)
+    {
+        observable.Unwatch(watcher);
+    }
+
+    public void Clear()
+    {
+        observable.Clear();
+    }
+
+    public static implicit operator T(ScriptableValue<T> value) => value.Value;
+
+    private void Awake()
+    {
+        observable = Value;
+    }
+
+    private void OnValidate()
+    {
+        if (observable != null)
+            observable.Value = Value;
+    }
+}
+
+#if !UNITY_EDITOR
+
+partial class ScriptableValue<T>
+{
+    public T Value
+    {
+        get => value;
+        set
+        {
+            if (this.value.Equals(value))
+                return;
+
+            this.value = value;
+            observable.Value = Value;
+        }
+    }
+
+    private void OnEnable()
+    {
+        hideFlags = HideFlags.DontUnloadUnusedAsset;
+    }
+}
+
+#else
+
+partial class ScriptableValue<T>
+{
     public T Value
     {
         get => keepPlaymodeChanges ? value : savedValue;
         set
         {
-            T oldValue;
-            if (keepPlaymodeChanges)
-            {
-                oldValue = this.value;
-                this.value = value;
-            }
-            else
-            {
-                oldValue = savedValue;
-                savedValue = value;
-            }
+            if (Value.Equals(value))
+                return;
 
-            if (OnValueChanged != null && !oldValue.Equals(value))
-                OnValueChanged.Invoke(value);
+            if (keepPlaymodeChanges)
+                this.value = value;
+            else
+                savedValue = value;
+
+            observable.Value = Value;
         }
     }
 
@@ -43,26 +111,6 @@ public class ScriptableValue<T> : ScriptableObject {
         hideFlags = HideFlags.DontUnloadUnusedAsset;
         savedValue = value;
     }
-
-#else
-    public T Value 
-    {
-        get => value;
-        set 
-    {
-            T oldValue = this.value;
-            this.value = value;
-
-            if (OnValueChanged != null && !oldValue.Equals(value))
-                OnValueChanged.Invoke(value);
-        }
-    }
-
-    private void OnEnable()
-    {
-        hideFlags = HideFlags.DontUnloadUnusedAsset;
-    }
-#endif
-
-    public static implicit operator T(ScriptableValue<T> value) => value.Value;
 }
+
+#endif

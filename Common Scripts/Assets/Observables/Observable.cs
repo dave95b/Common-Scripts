@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Observables
 {
-    public class Observable<T> where T : struct, IEquatable<T>
+    public class Observable<T> : IObservable<T> where T : struct, IEquatable<T>
     {
         private T value;
         public T Value

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-static class EnumeratorsUtility
+public static class EnumeratorsUtility
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MoveNext(ref int index, int count)
