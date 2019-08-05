@@ -330,6 +330,7 @@ MonoBehaviour:
   listText: {fileID: 1673313473}
   setText: {fileID: 214802638}
   indexedSetText: {fileID: 1336470489}
+  multiSetText: {fileID: 2144537039}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,7 +704,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2144537038
 RectTransform:
   m_ObjectHideFlags: 0

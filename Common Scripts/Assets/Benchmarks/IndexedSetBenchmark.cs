@@ -11,11 +11,12 @@ public class IndexedSetBenchmark : MonoBehaviour
     private int count, repeats;
 
     [SerializeField]
-    private Text listText, setText, indexedSetText;
+    private Text listText, setText, indexedSetText, multiSetText;
 
     private List<int> list;
     private HashSet<int> set;
     private IndexedSet<int> indexedSet;
+    private IndexedMultiSet<int> multiSet;
 
     private int[] data;
 
@@ -23,7 +24,9 @@ public class IndexedSetBenchmark : MonoBehaviour
     {
         list = new List<int>(count);
         set = new HashSet<int>(new IntComparer());
-        indexedSet = new IndexedSet<int>(count, new IntComparer());
+        var comparer = new IntComparer();
+        indexedSet = new IndexedSet<int>(count, comparer);
+        multiSet = new IndexedMultiSet<int>(count, comparer);
         data = new int[count];
     }
 
@@ -56,12 +59,14 @@ public class IndexedSetBenchmark : MonoBehaviour
         Benchmark(ListAdd, "List Add", listText, refill: false);
         Benchmark(SetAdd, "Set Add", setText, refill: false);
         Benchmark(IndexedSetAdd, "Indexed Set Add", indexedSetText, refill: false);
+        Benchmark(MultiSetAdd, "Multi Set Add", multiSetText, refill: false);
     }
 
     private void AddExistingBenchmark()
     {
         Benchmark(SetAdd, "Set Add Existing", setText);
         Benchmark(IndexedSetAdd, "Indexed Set Add Existing", indexedSetText);
+        Benchmark(MultiSetAdd, "Multi Set Add Existing", multiSetText);
     }
 
 
@@ -83,12 +88,19 @@ public class IndexedSetBenchmark : MonoBehaviour
             indexedSet.Add(i);
     }
 
+    private void MultiSetAdd()
+    {
+        for (int i = 0; i < count; i++)
+            multiSet.Add(i);
+    }
+
 
     private void RemoveBenchmark()
     {
         Benchmark(ListRemove, "List Remove", listText);
         Benchmark(SetRemove, "Set Remove", setText);
         Benchmark(IndexedSetRemove, "Indexed Set Remove", indexedSetText);
+        Benchmark(MultiSetRemove, "Multi Set Remove", multiSetText);
     }
 
     private void ListRemove()
@@ -109,6 +121,12 @@ public class IndexedSetBenchmark : MonoBehaviour
             indexedSet.Remove(data[i]);
     }
 
+    private void MultiSetRemove()
+    {
+        for (int i = 0; i < count; i++)
+            multiSet.Remove(data[i]);
+    }
+
 
 
     private void ContainsBenchmark()
@@ -116,6 +134,7 @@ public class IndexedSetBenchmark : MonoBehaviour
         Benchmark(ListContains, "List Contains", listText);
         Benchmark(SetContains, "Set Contains", setText);
         Benchmark(IndexedSetContains, "Indexed Set Contains", indexedSetText);
+        Benchmark(MultiSetContains, "Multi Set Contains", multiSetText);
     }
 
     private void ListContains()
@@ -139,11 +158,19 @@ public class IndexedSetBenchmark : MonoBehaviour
             c = indexedSet.Contains(data[i]);
     }
 
+    private void MultiSetContains()
+    {
+        bool c;
+        for (int i = 0; i < count; i++)
+            c = multiSet.Contains(data[i]);
+    }
+
 
     private void RemoveAtBenchmark()
     {
         Benchmark(ListRemoveAt, "List Remove At (last)", listText);
         Benchmark(IndexedSetRemoveAt, "Indexed Set Remove At (last)", indexedSetText);
+        Benchmark(MultiSetRemoveAt, "Multi Set Remove At (last)", multiSetText);
     }
 
     private void ListRemoveAt()
@@ -157,12 +184,18 @@ public class IndexedSetBenchmark : MonoBehaviour
         for (int i = 0; i < count; i++)
             indexedSet.RemoveAt(indexedSet.Count - 1);
     }
+    private void MultiSetRemoveAt()
+    {
+        for (int i = 0; i < count; i++)
+            multiSet.RemoveAt(multiSet.Count - 1);
+    }
 
 
     private void RemoveAtFirstBenchmark()
     {
         Benchmark(ListRemoveAtFirst, "List Remove At (first)", listText);
         Benchmark(IndexedSetRemoveAtFirst, "Indexed Set Remove At (first)", indexedSetText);
+        Benchmark(MultiSetRemoveAtFirst, "Multi Set Remove At (first)", multiSetText);
     }
 
     private void ListRemoveAtFirst()
@@ -177,11 +210,18 @@ public class IndexedSetBenchmark : MonoBehaviour
             indexedSet.RemoveAt(0);
     }
 
+    private void MultiSetRemoveAtFirst()
+    {
+        for (int i = 0; i < count; i++)
+            multiSet.RemoveAt(0);
+    }
+
 
     private void IndexOfBenchmark()
     {
         Benchmark(ListIndexOf, "List Index Of", listText);
         Benchmark(IndexedSetIndexOf, "Indexed Set Index Of", indexedSetText);
+        Benchmark(MultiSetIndexOf, "Multi Set Index Of", multiSetText);
     }
 
     private void ListIndexOf()
@@ -198,11 +238,19 @@ public class IndexedSetBenchmark : MonoBehaviour
             index = indexedSet.IndexOf(data[i]);
     }
 
+    private void MultiSetIndexOf()
+    {
+        int index;
+        for (int i = 0; i < count; i++)
+            index = multiSet.IndexOf(data[i]);
+    }
+
 
     private void IndexerGetterBenchmark()
     {
         Benchmark(ListIndexerGetter, "List Indexer Getter", listText);
         Benchmark(IndexedSetIndexerGetter, "Indexed Set Indexer Getter", indexedSetText);
+        Benchmark(MultiSetIndexerGetter, "Multi Set Indexer Getter", multiSetText);
     }
 
     private void ListIndexerGetter()
@@ -219,11 +267,19 @@ public class IndexedSetBenchmark : MonoBehaviour
             value = indexedSet[i];
     }
 
+    private void MultiSetIndexerGetter()
+    {
+        int value;
+        for (int i = 0; i < count; i++)
+            value = multiSet[i];
+    }
+
 
     private void IndexerSetterBenchmark()
     {
         Benchmark(ListIndexerSetter, "List Indexer Setter", listText);
         Benchmark(IndexedSetIndexerSetter, "Indexed Set Indexer Setter", indexedSetText);
+        Benchmark(MultiSetIndexerSetter, "Multi Set Indexer Setter", multiSetText);
     }
 
     private void ListIndexerSetter()
@@ -238,11 +294,18 @@ public class IndexedSetBenchmark : MonoBehaviour
             indexedSet[i] = -data[i];
     }
 
+    private void MultiSetIndexerSetter()
+    {
+        for (int i = 0; i < count; i++)
+            multiSet[i] = -data[i];
+    }
+
 
     private void IndexerSetterExistingBenchmark()
     {
         Benchmark(ListIndexerSetterExisting, "List Indexer Setter Existing", listText);
         Benchmark(IndexedSetIndexerSetterExisting, "Indexed Set Indexer Setter Existing", indexedSetText);
+        Benchmark(MultiSetIndexerSetterExisting, "Multi Set Indexer Setter Existing", multiSetText);
     }
 
     private void ListIndexerSetterExisting()
@@ -255,6 +318,12 @@ public class IndexedSetBenchmark : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
             indexedSet[i] = data[i];
+    }
+
+    private void MultiSetIndexerSetterExisting()
+    {
+        for (int i = 0; i < count; i++)
+            multiSet[i] = data[i];
     }
 
 
@@ -284,6 +353,7 @@ public class IndexedSetBenchmark : MonoBehaviour
         list.Clear();
         set.Clear();
         indexedSet.Clear();
+        multiSet.Clear();
     }
 
     private void Refill()
@@ -294,6 +364,7 @@ public class IndexedSetBenchmark : MonoBehaviour
             list.Add(i);
             set.Add(i);
             indexedSet.Add(i);
+            multiSet.Add(i);
             data[i] = i;
         }
 

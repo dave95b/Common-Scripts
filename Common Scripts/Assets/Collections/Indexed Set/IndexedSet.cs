@@ -57,6 +57,7 @@ public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
     public bool IsReadOnly => false;
 
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Add(T item)
     {
         if (Contains(item))
@@ -74,6 +75,7 @@ public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
         Add(item);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Clear()
     {
         list.Clear();
@@ -108,9 +110,8 @@ public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
         if (Contains(item))
             return false;
 
-        list.Insert(index, item);
-        count++;
-        UpdateIndicesFrom(index);
+        Add(item);
+        this[index] = item;
 
         return true;
     }
@@ -180,30 +181,5 @@ public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return list.GetEnumerator();
-    }
-
-
-    private void UpdateIndicesFrom(int index)
-    {
-        for (int i = index; i < count; i++)
-        {
-            T elem = list[i];
-            indices[elem] = i;
-        }
-    }
-
-    private class FunctorComparer : IComparer<T>
-    {
-        private readonly Comparison<T> comparison;
-
-        public FunctorComparer(Comparison<T> comparison)
-        {
-            this.comparison = comparison;
-        }
-
-        public int Compare(T x, T y)
-        {
-            return comparison(x, y);
-        }
     }
 }

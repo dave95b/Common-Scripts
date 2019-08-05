@@ -2,7 +2,8 @@
     "name": "IndexedSet",
     "references": [
         "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
-        "GUID:8a4b8de3cfd0998449e97bcc36472d6d"
+        "GUID:8a4b8de3cfd0998449e97bcc36472d6d",
+        "GUID:8695fbfacbe3f594db3d32a6b9b8e191"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

@@ -239,6 +239,12 @@ namespace Tests
         }
 
         [Test]
+        public void LastIndexOf2()
+        {
+            int index = set.LastIndexOf(30);
+        }
+
+        [Test]
         public void Insert()
         {
             int current = set[0];
@@ -308,7 +314,33 @@ namespace Tests
             Assert.AreEqual(6, set.Count);
             AssertItemsOrder();
 
+            set.Insert(0, -1);
+            set.Add(-1);
+            set.RemoveAt(0);
+            Assert.AreEqual(7, set.Count);
+            Assert.IsTrue(set.Contains(-1));
+            AssertItemsOrder();
 
+            set.RemoveAt(0);
+            Assert.AreEqual(6, set.Count);
+            Assert.IsFalse(set.Contains(-1));
+            AssertItemsOrder();
+        }
+
+        [Test]
+        public void RemoveAtAll()
+        {
+            for (int i = set.Count - 1; i >= 0; i--)
+            {
+                set.RemoveAt(0);
+                Assert.AreEqual(i, set.Count);
+                AssertItemsOrder();
+            }
+        }
+
+        [Test]
+        public void RemoveAtExceptions()
+        {
             Assert.That(() => set.RemoveAt(-1),
             Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
 
