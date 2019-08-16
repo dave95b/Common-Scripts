@@ -21,7 +21,6 @@ namespace Common.Collections.Specialized
 
         public ListFragment(List<T> list) : this(list, 0, list.Count) { }
         public ListFragment(List<T> list, int count) : this(list, 0, count) { }
-
         public ListFragment(List<T> list, int start, int count)
         {
             ThrowHelper.ThrowIfWrongArguments(list, start, count);

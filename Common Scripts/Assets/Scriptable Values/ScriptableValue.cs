@@ -1,8 +1,6 @@
 ﻿using Common.Observables;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 
 namespace Common
@@ -84,7 +82,7 @@ partial class ScriptableValue<T>
 
 #else
 
-    partial class ScriptableValue<T>
+    public partial class ScriptableValue<T>
     {
         public T Value
         {

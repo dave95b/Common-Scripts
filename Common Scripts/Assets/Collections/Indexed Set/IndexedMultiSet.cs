@@ -1,8 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Collections;
 using System.Runtime.CompilerServices;
-using UnityEngine.Assertions;
 
 namespace Common.Collections.Generic
 {
@@ -177,8 +175,7 @@ namespace Common.Collections.Generic
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Add(T item, int index)
             {
-                List<int> indices;
-                if (dictionary.TryGetValue(item, out indices))
+                if (dictionary.TryGetValue(item, out List<int> indices))
                 {
                     int indexPosition = indices.BinarySearch(index);
                     if (indexPosition < 0)

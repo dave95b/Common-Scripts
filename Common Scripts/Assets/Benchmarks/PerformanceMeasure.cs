@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using UnityEngine.UI;
 

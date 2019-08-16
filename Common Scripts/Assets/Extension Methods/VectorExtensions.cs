@@ -22,7 +22,7 @@ public static class VectorExtensions
     public static Vector3 WithY(this Vector3 vector, float y) => new Vector3(vector.x, y, vector.z);
 
     public static Vector3 WithZ(this Vector3 vector, float z) => new Vector3(vector.x, vector.y, z);
-    
+
 
     public static Vector3 xxx(this Vector3 vector) => new Vector3(vector.x, vector.x, vector.x);
     public static Vector3 xxy(this Vector3 vector) => new Vector3(vector.x, vector.x, vector.y);
@@ -40,11 +40,11 @@ public static class VectorExtensions
     public static Vector3 yxx(this Vector3 vector) => new Vector3(vector.y, vector.x, vector.x);
     public static Vector3 yxy(this Vector3 vector) => new Vector3(vector.y, vector.x, vector.y);
     public static Vector3 yxz(this Vector3 vector) => new Vector3(vector.y, vector.x, vector.z);
-                                                                         
+
     public static Vector3 yyx(this Vector3 vector) => new Vector3(vector.y, vector.y, vector.x);
     public static Vector3 yyy(this Vector3 vector) => new Vector3(vector.y, vector.y, vector.y);
     public static Vector3 yyz(this Vector3 vector) => new Vector3(vector.y, vector.y, vector.z);
-                                                                         
+
     public static Vector3 yzx(this Vector3 vector) => new Vector3(vector.y, vector.z, vector.x);
     public static Vector3 yzy(this Vector3 vector) => new Vector3(vector.y, vector.z, vector.y);
     public static Vector3 yzz(this Vector3 vector) => new Vector3(vector.y, vector.z, vector.z);
@@ -53,11 +53,11 @@ public static class VectorExtensions
     public static Vector3 zxx(this Vector3 vector) => new Vector3(vector.z, vector.x, vector.x);
     public static Vector3 zxy(this Vector3 vector) => new Vector3(vector.z, vector.x, vector.y);
     public static Vector3 zxz(this Vector3 vector) => new Vector3(vector.z, vector.x, vector.z);
-                                                                         
+
     public static Vector3 zyx(this Vector3 vector) => new Vector3(vector.z, vector.y, vector.x);
     public static Vector3 zyy(this Vector3 vector) => new Vector3(vector.z, vector.y, vector.y);
     public static Vector3 zyz(this Vector3 vector) => new Vector3(vector.z, vector.y, vector.z);
-                                                                         
+
     public static Vector3 zzx(this Vector3 vector) => new Vector3(vector.z, vector.z, vector.x);
     public static Vector3 zzy(this Vector3 vector) => new Vector3(vector.z, vector.z, vector.y);
     public static Vector3 zzz(this Vector3 vector) => new Vector3(vector.z, vector.z, vector.z);

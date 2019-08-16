@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Common.Collections.Generic;
+﻿using Common.Collections.Generic;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace Tests
 {

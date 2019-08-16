@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
 using System.Linq;
-using NaughtyAttributes;
-using System;
+using UnityEngine;
 
 namespace Common.Responsiveness
 {
@@ -41,7 +40,7 @@ namespace Common.Responsiveness
     }
 
 #if UNITY_EDITOR
-    partial class CameraDataBroadcaster
+    public partial class CameraDataBroadcaster
     {
         [Button("Find Handlers")]
         private void FindHanlders()

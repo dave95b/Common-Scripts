@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections.Generic;
+﻿using Common.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Common.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Common.Benchmarks
 {
@@ -375,7 +375,7 @@ namespace Common.Benchmarks
         }
     }
 
-    class IntComparer : IEqualityComparer<int>
+    internal class IntComparer : IEqualityComparer<int>
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(int x, int y)

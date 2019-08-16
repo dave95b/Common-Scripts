@@ -18,7 +18,6 @@ namespace Common.Collections.Specialized
 
         public ArrayFragment(T[] array) : this(array, 0, array.Length) { }
         public ArrayFragment(T[] array, int length) : this(array, 0, length) { }
-
         public ArrayFragment(T[] array, int start, int length)
         {
             ThrowHelper.ThrowIfWrongArguments(array, start, length);
