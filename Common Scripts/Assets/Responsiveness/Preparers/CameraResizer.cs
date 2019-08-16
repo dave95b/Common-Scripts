@@ -1,29 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class CameraResizer : CameraDataPreparer
+namespace Common.Responsiveness
 {
-    [SerializeField]
-    private Transform boundBottomLeft, boundTopRight;
-
-    public override CameraData Prepare(in CameraData data)
+    public class CameraResizer : CameraDataPreparer
     {
-        Vector3 bottomLeft = boundBottomLeft.position;
-        Vector3 topRight = boundTopRight.position;
+        [SerializeField]
+        private Transform boundBottomLeft, boundTopRight;
 
-        float width = bottomLeft.x - topRight.x;
-        float height = topRight.y - bottomLeft.y;
+        public override CameraData Prepare(in CameraData data)
+        {
+            Vector3 bottomLeft = boundBottomLeft.position;
+            Vector3 topRight = boundTopRight.position;
 
-        float targetHeight = Mathf.Max(height, width / data.AspectRatio) / 2f;
+            float width = bottomLeft.x - topRight.x;
+            float height = topRight.y - bottomLeft.y;
 
-        var camera = data.Camera;
-        camera.orthographicSize = targetHeight;
+            float targetHeight = Mathf.Max(height, width / data.AspectRatio) / 2f;
 
-        float verticalCenter = (bottomLeft.y + topRight.y) / 2f;
-        Vector3 cameraPosition = camera.transform.position;
-        cameraPosition.y = verticalCenter;
-        camera.transform.position = cameraPosition;
+            var camera = data.Camera;
+            camera.orthographicSize = targetHeight;
 
-        return new CameraData(camera);
+            float verticalCenter = (bottomLeft.y + topRight.y) / 2f;
+            Vector3 cameraPosition = camera.transform.position;
+            cameraPosition.y = verticalCenter;
+            camera.transform.position = cameraPosition;
+
+            return new CameraData(camera);
+        }
     }
 }

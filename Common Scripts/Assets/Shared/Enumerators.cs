@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Common.Collections;
 
 public struct ArrayEnumerator<T> : IEnumerator<T>
 {

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public abstract class CameraDataReceiver : MonoBehaviour
+namespace Common.Responsiveness
 {
-    public abstract void ReceiveCameraData(in CameraData data);
+    public abstract class CameraDataReceiver : MonoBehaviour
+    {
+        public abstract void ReceiveCameraData(in CameraData data);
+    }
 }

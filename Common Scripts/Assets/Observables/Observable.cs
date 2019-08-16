@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Observables
+namespace Common.Observables
 {
     public class Observable<T> : IObservable<T> where T : struct, IEquatable<T>
     {

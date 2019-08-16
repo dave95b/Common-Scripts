@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CollectionFragmentsUtility
+namespace Common.Collections
 {
     internal enum CollectionType
     {

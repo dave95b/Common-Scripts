@@ -2,49 +2,52 @@
 using UnityEngine;
 
 
-[CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
-public class MinMaxRangeDrawer : PropertyDrawer
+namespace Common
 {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
+    public class MinMaxRangeDrawer : PropertyDrawer
     {
-        EditorGUI.BeginProperty(position, label, property);
-        int indent = EditorGUI.indentLevel;
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+            int indent = EditorGUI.indentLevel;
 
-        position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-        EditorGUI.indentLevel = 0;
+            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            EditorGUI.indentLevel = 0;
 
-        SerializedProperty minProperty = property.FindPropertyRelative("min");
-        SerializedProperty maxProperty = property.FindPropertyRelative("max");
-        float minValue = minProperty.floatValue;
-        float maxValue = maxProperty.floatValue;
+            SerializedProperty minProperty = property.FindPropertyRelative("min");
+            SerializedProperty maxProperty = property.FindPropertyRelative("max");
+            float minValue = minProperty.floatValue;
+            float maxValue = maxProperty.floatValue;
 
-        float fieldWidth = position.width / 5f - 4f;
-        float sliderWidth = position.width / 1.7f;
-        position.width = fieldWidth;
+            float fieldWidth = position.width / 5f - 4f;
+            float sliderWidth = position.width / 1.7f;
+            position.width = fieldWidth;
 
-        minValue = EditorGUI.FloatField(position, minValue);
+            minValue = EditorGUI.FloatField(position, minValue);
 
-        position.x += fieldWidth + 4f;
-        position.width = sliderWidth;
+            position.x += fieldWidth + 4f;
+            position.width = sliderWidth;
 
-        MinMaxRangeAttribute limit = attribute as MinMaxRangeAttribute;
-        EditorGUI.MinMaxSlider(position, ref minValue, ref maxValue, limit.Min, limit.Max);
+            MinMaxRangeAttribute limit = attribute as MinMaxRangeAttribute;
+            EditorGUI.MinMaxSlider(position, ref minValue, ref maxValue, limit.Min, limit.Max);
 
-        position.x += sliderWidth + 4f;
-        position.width = fieldWidth;
+            position.x += sliderWidth + 4f;
+            position.width = fieldWidth;
 
-        maxValue = EditorGUI.FloatField(position, maxValue);
+            maxValue = EditorGUI.FloatField(position, maxValue);
 
-        minValue = Mathf.Min(minValue, maxValue);
-        minValue = Mathf.Max(minValue, limit.Min);
+            minValue = Mathf.Min(minValue, maxValue);
+            minValue = Mathf.Max(minValue, limit.Min);
 
-        maxValue = Mathf.Max(minValue, maxValue);
-        maxValue = Mathf.Min(maxValue, limit.Max);
+            maxValue = Mathf.Max(minValue, maxValue);
+            maxValue = Mathf.Min(maxValue, limit.Max);
 
-        minProperty.floatValue = minValue;
-        maxProperty.floatValue = maxValue;
+            minProperty.floatValue = minValue;
+            maxProperty.floatValue = maxValue;
 
-        EditorGUI.EndProperty();
-        EditorGUI.indentLevel = indent;
+            EditorGUI.EndProperty();
+            EditorGUI.indentLevel = indent;
+        }
     }
 }

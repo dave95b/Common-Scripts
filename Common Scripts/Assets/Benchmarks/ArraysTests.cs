@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Benchmarks
+namespace Common.Benchmarks
 {
     public class ArraysTests : MonoBehaviour
     {

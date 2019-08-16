@@ -1,38 +1,42 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(menuName = "Audio Events/Simple", order = 170)]
-public class SimpleAudioEvent : AudioEvent
+namespace Common.AudioEvents
 {
-    [SerializeField]
-    private AudioClip[] clips;
-
-    [SerializeField, MinMaxRange(0f, 1f)]
-    private FloatRange volume = new FloatRange(1f, 1f);
-
-    [SerializeField, MinMaxRange(-3f, 3f)]
-    private FloatRange pitch = new FloatRange(1f, 1f);
-
-    public override void Play(AudioSource source)
+    [CreateAssetMenu(menuName = "Audio Events/Simple", order = 170)]
+    public class SimpleAudioEvent : AudioEvent
     {
-        if (clips.Length == 0) return;
+        [SerializeField]
+        private AudioClip[] clips;
 
-        source.clip = clips.GetRandom();
-        source.volume = volume.Random;
-        source.pitch = pitch.Random;
+        [SerializeField, MinMaxRange(0f, 1f)]
+        private FloatRange volume = new FloatRange(1f, 1f);
 
-        source.Play();
-    }
+        [SerializeField, MinMaxRange(-3f, 3f)]
+        private FloatRange pitch = new FloatRange(1f, 1f);
 
-    public override void PlayOneShot(AudioSource source)
-    {
-        if (clips.Length == 0)
-            return;
+        public override void Play(AudioSource source)
+        {
+            if (clips.Length == 0)
+                return;
 
-        AudioClip clip = clips.GetRandom();
-        source.volume = volume.Random;
-        source.pitch = pitch.Random;
+            source.clip = clips.GetRandom();
+            source.volume = volume.Random;
+            source.pitch = pitch.Random;
 
-        source.PlayOneShot(clip);
+            source.Play();
+        }
+
+        public override void PlayOneShot(AudioSource source)
+        {
+            if (clips.Length == 0)
+                return;
+
+            AudioClip clip = clips.GetRandom();
+            source.volume = volume.Random;
+            source.pitch = pitch.Random;
+
+            source.PlayOneShot(clip);
+        }
     }
 }

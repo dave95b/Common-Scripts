@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public readonly struct CameraData
+namespace Common.Responsiveness
 {
-    public readonly Camera Camera;
-    public readonly float AspectRatio, Width, Height, SizeToPixelRatio;
-
-    public CameraData(Camera camera)
+    public readonly struct CameraData
     {
-        Camera = camera;
-        AspectRatio = camera.aspect;
-        Height = camera.orthographicSize * 2f;
-        Width = AspectRatio * Height;
-        SizeToPixelRatio = camera.orthographicSize / camera.pixelHeight;
+        public readonly Camera Camera;
+        public readonly float AspectRatio, Width, Height, SizeToPixelRatio;
+
+        public CameraData(Camera camera)
+        {
+            Camera = camera;
+            AspectRatio = camera.aspect;
+            Height = camera.orthographicSize * 2f;
+            Width = AspectRatio * Height;
+            SizeToPixelRatio = camera.orthographicSize / camera.pixelHeight;
+        }
     }
 }

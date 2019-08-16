@@ -2,5 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Values/Float", order = 152)]
-public class FloatValue : ScriptableValue<float> { }
+namespace Common
+{
+    [CreateAssetMenu(menuName = "Scriptable Values/Float", order = 152)]
+    public class FloatValue : ScriptableValue<float> { }
+}

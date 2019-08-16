@@ -14,6 +14,8 @@ public static class GameObjectExtensions
         return component;
     }
 
+    #region Component Extensions
+
     public static void FindInChildren<T>(this Component component, ref T element)
     {
         element = component.GetComponentInChildren<T>();
@@ -44,6 +46,8 @@ public static class GameObjectExtensions
             elements.Add(elem as MonoBehaviour);
     }
 
+    #endregion Component Extensions
+
     #region Transform Extensions
 
     public static void SetPositionX(this Transform transform, float x)
@@ -62,6 +66,28 @@ public static class GameObjectExtensions
     }
 
 
+    public static void AddPositionX(this Transform transform, float delta)
+    {
+        Vector3 position = transform.position;
+        position.x += delta;
+        transform.position = position;
+    }
+
+    public static void AddPositionY(this Transform transform, float delta)
+    {
+        Vector3 position = transform.position;
+        position.y += delta;
+        transform.position = position;
+    }
+
+    public static void AddPositionZ(this Transform transform, float delta)
+    {
+        Vector3 position = transform.position;
+        position.z += delta;
+        transform.position = position;
+    }
+
+
     public static void SetLocalPositionX(this Transform transform, float x)
     {
         transform.localPosition = transform.localPosition.WithX(x);
@@ -77,6 +103,33 @@ public static class GameObjectExtensions
         transform.localPosition = transform.localPosition.WithZ(z);
     }
 
+
+    public static void AddLocalPositionX(this Transform transform, float delta)
+    {
+        Vector3 position = transform.localPosition;
+        position.x += delta;
+        transform.position = position;
+    }
+
+    public static void AddLocalPositionY(this Transform transform, float delta)
+    {
+        Vector3 position = transform.localPosition;
+        position.y += delta;
+        transform.position = position;
+    }
+
+    public static void AddLocalPositionZ(this Transform transform, float delta)
+    {
+        Vector3 position = transform.localPosition;
+        position.z += delta;
+        transform.position = position;
+    }
+
+
+    public static void SetScale(this Transform transform, float scale)
+    {
+        transform.localScale = Vector3.one * scale;
+    }
 
     public static void SetLocalScaleX(this Transform transform, float x)
     {

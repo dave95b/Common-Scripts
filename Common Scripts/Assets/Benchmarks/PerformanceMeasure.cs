@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine.UI;
 
-namespace Benchmarks
+namespace Common.Benchmarks
 {
     public static class PerformanceMeasure
     {

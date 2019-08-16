@@ -3,183 +3,186 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
+namespace Common.Collections.Generic
 {
-    private List<T> list;
-    private Dictionary<T, int> indices;
-
-    private IEqualityComparer<T> comparer;
-
-    public IndexedSet() : this(8, EqualityComparer<T>.Default) { }
-
-    public IndexedSet(int capacity) : this(capacity, EqualityComparer<T>.Default) { }
-
-    public IndexedSet(int capacity, IEqualityComparer<T> comparer)
+    public class IndexedSet<T> : IList<T>, IReadOnlyList<T>
     {
-        list = new List<T>(capacity);
-        indices = new Dictionary<T, int>(capacity, comparer);
-        this.comparer = comparer;
-    }
+        private List<T> list;
+        private Dictionary<T, int> indices;
 
+        private IEqualityComparer<T> comparer;
 
-    public T this[int index]
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => list[index];
-        set
+        public IndexedSet() : this(8, EqualityComparer<T>.Default) { }
+
+        public IndexedSet(int capacity) : this(capacity, EqualityComparer<T>.Default) { }
+
+        public IndexedSet(int capacity, IEqualityComparer<T> comparer)
         {
-            T current = list[index];
-            if (comparer.Equals(current, value))
-                return;
-
-            int valueIndex = IndexOf(value);
-            if (valueIndex == -1)
-                indices.Remove(current);
-            else
-            {
-                // Swap
-                list[valueIndex] = current;
-                indices[current] = valueIndex;
-            }
-
-            list[index] = value;
-            indices[value] = index;
+            list = new List<T>(capacity);
+            indices = new Dictionary<T, int>(capacity, comparer);
+            this.comparer = comparer;
         }
-    }
 
-    private int count = 0;
-    public int Count
-    {
+
+        public T this[int index]
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => list[index];
+            set
+            {
+                T current = list[index];
+                if (comparer.Equals(current, value))
+                    return;
+
+                int valueIndex = IndexOf(value);
+                if (valueIndex == -1)
+                    indices.Remove(current);
+                else
+                {
+                    // Swap
+                    list[valueIndex] = current;
+                    indices[current] = valueIndex;
+                }
+
+                list[index] = value;
+                indices[value] = index;
+            }
+        }
+
+        private int count = 0;
+        public int Count
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => count;
+        }
+
+        public bool IsReadOnly => false;
+
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => count;
-    }
+        public bool Add(T item)
+        {
+            if (Contains(item))
+                return false;
 
-    public bool IsReadOnly => false;
+            indices[item] = count;
+            list.Add(item);
+            count++;
 
+            return true;
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Add(T item)
-    {
-        if (Contains(item))
-            return false;
+        void ICollection<T>.Add(T item)
+        {
+            Add(item);
+        }
 
-        indices[item] = count;
-        list.Add(item);
-        count++;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Clear()
+        {
+            list.Clear();
+            indices.Clear();
+            count = 0;
+        }
 
-        return true;
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Contains(T item)
+        {
+            return indices.ContainsKey(item);
+        }
 
-    void ICollection<T>.Add(T item)
-    {
-        Add(item);
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            list.CopyTo(array, arrayIndex);
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Clear()
-    {
-        list.Clear();
-        indices.Clear();
-        count = 0;
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int IndexOf(T item)
+        {
+            if (indices.TryGetValue(item, out int index))
+                return index;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Contains(T item)
-    {
-        return indices.ContainsKey(item);
-    }
+            return -1;
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void CopyTo(T[] array, int arrayIndex)
-    {
-        list.CopyTo(array, arrayIndex);
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Insert(int index, T item)
+        {
+            if (Contains(item))
+                return false;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int IndexOf(T item)
-    {
-        if (indices.TryGetValue(item, out int index))
-            return index;
+            Add(item);
+            this[index] = item;
 
-        return -1;
-    }
+            return true;
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Insert(int index, T item)
-    {
-        if (Contains(item))
-            return false;
+        void IList<T>.Insert(int index, T item)
+        {
+            Insert(index, item);
+        }
 
-        Add(item);
-        this[index] = item;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Remove(T item)
+        {
+            int index = IndexOf(item);
 
-        return true;
-    }
+            if (index == -1)
+                return false;
 
-    void IList<T>.Insert(int index, T item)
-    {
-        Insert(index, item);
-    }
+            RemoveAt(index);
+            return true;
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Remove(T item)
-    {
-        int index = IndexOf(item);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void RemoveAt(int index)
+        {
+            T removed = list[index];
+            indices.Remove(removed);
 
-        if (index == -1)
-            return false;
+            int lastIndex = list.Count - 1;
+            T last = list[lastIndex];
+            list[index] = last;
+            list.RemoveAt(lastIndex);
 
-        RemoveAt(index);
-        return true;
-    }
+            indices[last] = index;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void RemoveAt(int index)
-    {
-        T removed = list[index];
-        indices.Remove(removed);
+            count--;
+        }
 
-        int lastIndex = list.Count - 1;
-        T last = list[lastIndex];
-        list[index] = last;
-        list.RemoveAt(lastIndex);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int BinarySearch(T item)
+        {
+            return list.BinarySearch(item);
+        }
 
-        indices[last] = index;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int BinarySearch(T item, IComparer<T> comparer)
+        {
+            return list.BinarySearch(item, comparer);
+        }
 
-        count--;
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int BinarySearch(int index, int count, T item, IComparer<T> comparer)
+        {
+            return list.BinarySearch(index, count, item, comparer);
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int BinarySearch(T item)
-    {
-        return list.BinarySearch(item);
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public List<T>.Enumerator GetEnumerator()
+        {
+            return list.GetEnumerator();
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int BinarySearch(T item, IComparer<T> comparer)
-    {
-        return list.BinarySearch(item, comparer);
-    }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return list.GetEnumerator();
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int BinarySearch(int index, int count, T item, IComparer<T> comparer)
-    {
-        return list.BinarySearch(index, count, item, comparer);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public List<T>.Enumerator GetEnumerator()
-    {
-        return list.GetEnumerator();
-    }
-
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        return list.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return list.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return list.GetEnumerator();
+        }
     }
 }

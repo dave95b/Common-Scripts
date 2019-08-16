@@ -1,19 +1,22 @@
 {
     "name": "Tests",
     "references": [
-        "GUID:96a2a65bc66bc144b890d015ecdacaf8"
-    ],
-    "optionalUnityReferences": [
-        "TestAssemblies"
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:8695fbfacbe3f594db3d32a6b9b8e191"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": []
 }

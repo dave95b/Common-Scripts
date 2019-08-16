@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class CameraDataPreparer : MonoBehaviour
+namespace Common.Responsiveness
 {
-    public abstract CameraData Prepare(in CameraData data);
+    public abstract class CameraDataPreparer : MonoBehaviour
+    {
+        public abstract CameraData Prepare(in CameraData data);
+    }
 }

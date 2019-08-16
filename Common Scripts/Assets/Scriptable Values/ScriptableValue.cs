@@ -1,60 +1,63 @@
-﻿using Observables;
+﻿using Common.Observables;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public partial class ScriptableValue<T> : ScriptableObject, IObservable<T> where T : struct, IEquatable<T>
+
+namespace Common
 {
-    [SerializeField]
-    protected T value;
-
-    private Observable<T> observable;
-
-
-    public void Listen(Action<T> watcher)
+    public partial class ScriptableValue<T> : ScriptableObject, Observables.IObservable<T> where T : struct, IEquatable<T>
     {
-        observable.Listen(watcher);
-    }
+        [SerializeField]
+        protected T value;
 
-    public void Listen(Action<T> watcher, Func<T, bool> where)
-    {
-        observable.Listen(watcher, where);
-    }
+        private Observable<T> observable;
 
-    public void Watch(Action<T> watcher)
-    {
-        observable.Watch(watcher);
-    }
 
-    public void Watch(Action<T> watcher, Func<T, bool> where)
-    {
-        observable.Watch(watcher, where);
-    }
+        public void Listen(Action<T> watcher)
+        {
+            observable.Listen(watcher);
+        }
 
-    public void Unwatch(Action<T> watcher)
-    {
-        observable.Unwatch(watcher);
-    }
+        public void Listen(Action<T> watcher, Func<T, bool> where)
+        {
+            observable.Listen(watcher, where);
+        }
 
-    public void Clear()
-    {
-        observable.Clear();
-    }
+        public void Watch(Action<T> watcher)
+        {
+            observable.Watch(watcher);
+        }
 
-    public static implicit operator T(ScriptableValue<T> value) => value.Value;
+        public void Watch(Action<T> watcher, Func<T, bool> where)
+        {
+            observable.Watch(watcher, where);
+        }
 
-    private void Awake()
-    {
-        observable = Value;
-    }
+        public void Unwatch(Action<T> watcher)
+        {
+            observable.Unwatch(watcher);
+        }
 
-    private void OnValidate()
-    {
-        if (observable != null)
-            observable.Value = Value;
+        public void Clear()
+        {
+            observable.Clear();
+        }
+
+        public static implicit operator T(ScriptableValue<T> value) => value.Value;
+
+        private void Awake()
+        {
+            observable = Value;
+        }
+
+        private void OnValidate()
+        {
+            if (observable != null)
+                observable.Value = Value;
+        }
     }
-}
 
 #if !UNITY_EDITOR
 
@@ -81,36 +84,37 @@ partial class ScriptableValue<T>
 
 #else
 
-partial class ScriptableValue<T>
-{
-    public T Value
+    partial class ScriptableValue<T>
     {
-        get => keepPlaymodeChanges ? value : savedValue;
-        set
+        public T Value
         {
-            if (Value.Equals(value))
-                return;
+            get => keepPlaymodeChanges ? value : savedValue;
+            set
+            {
+                if (Value.Equals(value))
+                    return;
 
-            if (keepPlaymodeChanges)
-                this.value = value;
-            else
-                savedValue = value;
+                if (keepPlaymodeChanges)
+                    this.value = value;
+                else
+                    savedValue = value;
 
-            observable.Value = Value;
+                observable.Value = Value;
+            }
+        }
+
+        [SerializeField]
+        private bool keepPlaymodeChanges;
+
+        [SerializeField, HideInInspector]
+        protected T savedValue;
+
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontUnloadUnusedAsset;
+            savedValue = value;
         }
     }
 
-    [SerializeField]
-    private bool keepPlaymodeChanges;
-
-    [SerializeField, HideInInspector]
-    protected T savedValue;
-
-    private void OnEnable()
-    {
-        hideFlags = HideFlags.DontUnloadUnusedAsset;
-        savedValue = value;
-    }
-}
-
 #endif
+}
