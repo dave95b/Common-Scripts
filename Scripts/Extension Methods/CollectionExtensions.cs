@@ -28,9 +28,7 @@ public static class CollectionExtensions
         for (int i = start; i < last; ++i)
         {
             int randomIndex = Random.Range(i, last + 1);
-            T tmp = list[i];
-            list[i] = list[randomIndex];
-            list[randomIndex] = tmp;
+            list.Swap(i, randomIndex);
         }
     }
 
@@ -59,47 +57,6 @@ public static class CollectionExtensions
     #endregion IList
 
     #region Array
-
-    public static void Shuffle<T>(this T[] array)
-    {
-        Shuffle(array, 0, array.Length);
-    }
-
-    public static void Shuffle<T>(this T[] array, int length)
-    {
-        Shuffle(array, 0, length);
-    }
-
-    public static void Shuffle<T>(this T[] array, int start, int length)
-    {
-        Assert.IsTrue(start >= 0);
-        Assert.IsTrue(start + length <= array.Length);
-
-        int last = start + length - 1;
-
-        for (int i = start; i < last; ++i)
-        {
-            int randomIndex = Random.Range(i, last + 1);
-            T tmp = array[i];
-            array[i] = array[randomIndex];
-            array[randomIndex] = tmp;
-        }
-    }
-
-    public static T GetRandom<T>(this T[] array)
-    {
-        return array[Random.Range(0, array.Length)];
-    }
-
-    public static void Swap<T>(this T[] array, int sourceIndex, int destinationIndex)
-    {
-        if (sourceIndex == destinationIndex)
-            return;
-
-        T temp = array[sourceIndex];
-        array[sourceIndex] = array[destinationIndex];
-        array[destinationIndex] = temp;
-    }
 
     public static bool Contains<T>(this T[] array, T item)
     {

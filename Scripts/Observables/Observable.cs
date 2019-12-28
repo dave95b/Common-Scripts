@@ -20,10 +20,10 @@ namespace Common.Observables
             }
         }
 
-        private static Func<T, bool> trueFilter = (t) => true;
+        private static readonly Func<T, bool> trueFilter = (t) => true;
 
-        private List<Action<T>> watchers = new List<Action<T>>(8);
-        private List<Func<T, bool>> filters = new List<Func<T, bool>>(8);
+        private readonly List<Action<T>> watchers = new List<Action<T>>(8);
+        private readonly List<Func<T, bool>> filters = new List<Func<T, bool>>(8);
 
         public Observable() : this(default)
         { }
