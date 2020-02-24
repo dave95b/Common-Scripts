@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Random = UnityEngine.Random;
+using UnityEngine;
 using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 public static class CollectionExtensions
 {
@@ -61,6 +61,15 @@ public static class CollectionExtensions
     public static bool Contains<T>(this T[] array, T item)
     {
         return Array.IndexOf(array, item) >= 0;
+    }
+
+    public static void ValidateType<T, U>(this T[] array)
+    {
+        foreach (var elem in array)
+        {
+            if (elem != null && !(elem is U))
+                Debug.LogError($"{elem.GetType().Name} doesn't implement {typeof(U).Name} interface");
+        }
     }
 
     #endregion Array
