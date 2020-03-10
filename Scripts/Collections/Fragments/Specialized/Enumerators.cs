@@ -14,9 +14,13 @@ namespace Common.Collections.Specialized
         T IEnumerator<T>.Current => array[index];
         object IEnumerator.Current => array[index];
 
+        public ArrayEnumerator(T[] array) : this(array, start: 0, array.Length)
+        {
+        }
 
-        public ArrayEnumerator(T[] array) : this(array, start: 0, array.Length) { }
-        public ArrayEnumerator(T[] array, int length) : this(array, start: 0, length) { }
+        public ArrayEnumerator(T[] array, int length) : this(array, start: 0, length)
+        {
+        }
 
         public ArrayEnumerator(T[] array, int start, int length)
         {
@@ -27,10 +31,7 @@ namespace Common.Collections.Specialized
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool MoveNext()
-        {
-            return EnumeratorsUtility.MoveNext(ref index, end);
-        }
+        public bool MoveNext() => EnumeratorsUtility.MoveNext(ref index, end);
 
         public void Dispose()
         {
@@ -51,9 +52,13 @@ namespace Common.Collections.Specialized
         public T Current => list[index];
         object IEnumerator.Current => list[index];
 
+        public ListEnumerator(List<T> list) : this(list, start: 0, list.Count)
+        {
+        }
 
-        public ListEnumerator(List<T> list) : this(list, start: 0, list.Count) { }
-        public ListEnumerator(List<T> list, int count) : this(list, start: 0, count) { }
+        public ListEnumerator(List<T> list, int count) : this(list, start: 0, count)
+        {
+        }
 
         public ListEnumerator(List<T> list, int start, int count)
         {
@@ -63,12 +68,8 @@ namespace Common.Collections.Specialized
             index = start - 1;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool MoveNext()
-        {
-            return EnumeratorsUtility.MoveNext(ref index, end);
-        }
+        public bool MoveNext() => EnumeratorsUtility.MoveNext(ref index, end);
 
         public void Dispose()
         {
