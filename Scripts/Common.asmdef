@@ -2,9 +2,10 @@
     "name": "Common",
     "references": [
         "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
-        "GUID:8a4b8de3cfd0998449e97bcc36472d6d"
+        "GUID:8a4b8de3cfd0998449e97bcc36472d6d",
+        "GUID:d342243a01c47d14c8bf4e0f30d4fcfe",
+        "GUID:ba6838ca38a85294ba8801ee4379a972"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -12,5 +13,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }
