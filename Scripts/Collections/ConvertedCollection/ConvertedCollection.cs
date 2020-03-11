@@ -7,10 +7,10 @@ namespace Common.Collections.Generic
 {
     public readonly struct ConvertedCollection<TInput, TOutput> : IReadOnlyList<TOutput>
     {
-        private readonly IList<TInput> collection;
+        private readonly IReadOnlyList<TInput> collection;
         private readonly Func<TInput, TOutput> converter;
 
-        public ConvertedCollection(IList<TInput> collection, Func<TInput, TOutput> converter)
+        public ConvertedCollection(IReadOnlyList<TInput> collection, Func<TInput, TOutput> converter)
         {
             this.collection = collection;
             this.converter = converter;
@@ -24,29 +24,19 @@ namespace Common.Collections.Generic
 
         public int Count => collection.Count;
 
+        public Enumerator GetEnumerator() => new Enumerator(collection, converter);
 
-        public Enumerator GetEnumerator()
-        {
-            return new Enumerator(collection, converter);
-        }
+        IEnumerator<TOutput> IEnumerable<TOutput>.GetEnumerator() => GetEnumerator();
 
-        IEnumerator<TOutput> IEnumerable<TOutput>.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public struct Enumerator : IEnumerator<TOutput>
         {
-            private readonly IList<TInput> collection;
+            private readonly IReadOnlyList<TInput> collection;
             private readonly Func<TInput, TOutput> converter;
             private int index;
 
-            public Enumerator(IList<TInput> collection, Func<TInput, TOutput> converter) : this()
+            public Enumerator(IReadOnlyList<TInput> collection, Func<TInput, TOutput> converter) : this()
             {
                 this.collection = collection;
                 this.converter = converter;
@@ -56,19 +46,17 @@ namespace Common.Collections.Generic
             public TOutput Current => converter(collection[index]);
             object IEnumerator.Current => converter(collection[index]);
 
-
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool MoveNext()
-            {
-                return EnumeratorsUtility.MoveNext(ref index, collection.Count);
-            }
+            public bool MoveNext() => EnumeratorsUtility.MoveNext(ref index, collection.Count);
 
             public void Reset()
             {
                 index = -1;
             }
 
-            public void Dispose() { }
+            public void Dispose()
+            {
+            }
         }
     }
 }
