@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public static class GameObjectExtensions
@@ -26,24 +25,9 @@ public static class GameObjectExtensions
         elements = component.GetComponentsInChildren<T>();
     }
 
-    public static void FindInChildren<T>(this Component component, ref MonoBehaviour[] elements)
+    public static void FindInChildren<T>(this Component component, List<T> elements)
     {
-        T[] interfaces = component.GetComponentsInChildren<T>();
-        elements = Array.ConvertAll(interfaces, i => i as MonoBehaviour);
-    }
-
-    public static void FindInChildren<T>(this Component component, ref List<T> elements)
-    {
-        T[] found = component.GetComponentsInChildren<T>();
-        elements = new List<T>(found);
-    }
-
-    public static void FindInChildren<T>(this Component component, ref List<MonoBehaviour> elements)
-    {
-        T[] found = component.GetComponentsInChildren<T>();
-        elements = new List<MonoBehaviour>(found.Length);
-        foreach (var elem in found)
-            elements.Add(elem as MonoBehaviour);
+        component.GetComponentsInChildren(elements);
     }
 
     #endregion Component Extensions
@@ -64,7 +48,6 @@ public static class GameObjectExtensions
     {
         transform.position = transform.position.WithZ(z);
     }
-
 
     public static void AddPositionX(this Transform transform, float delta)
     {
@@ -87,7 +70,6 @@ public static class GameObjectExtensions
         transform.position = position;
     }
 
-
     public static void SetLocalPositionX(this Transform transform, float x)
     {
         transform.localPosition = transform.localPosition.WithX(x);
@@ -102,7 +84,6 @@ public static class GameObjectExtensions
     {
         transform.localPosition = transform.localPosition.WithZ(z);
     }
-
 
     public static void AddLocalPositionX(this Transform transform, float delta)
     {
@@ -124,7 +105,6 @@ public static class GameObjectExtensions
         position.z += delta;
         transform.position = position;
     }
-
 
     public static void SetScale(this Transform transform, float scale)
     {
